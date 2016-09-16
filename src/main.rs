@@ -41,9 +41,9 @@ mod mallard {
     use quack::{QuackBehavior, QuackAsDuck};
 
     pub struct MallardDuck {
-        name : String,
-        fly :  Box<FlyBehavior>,
-        quack :  Box<QuackAsDuck>,
+        name    : String,
+        fly     :  Box<FlyBehavior>,
+        quack   :  Box<QuackBehavior>,
     }
 
     impl MallardDuck {
