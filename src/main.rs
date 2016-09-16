@@ -5,7 +5,9 @@ mod fly {
     }
     pub struct FlyWithWings;
     impl FlyWithWings {
-        pub fn new()->Self { FlyWithWings  }
+        pub fn new() -> Self {
+            FlyWithWings
+        }
     }
     impl FlyBehavior for FlyWithWings {
         fn perform(&self) {
@@ -15,7 +17,9 @@ mod fly {
 
     pub struct FlyNoWay;
     impl FlyNoWay {
-        pub fn new() -> Self {FlyNoWay}
+        pub fn new() -> Self {
+            FlyNoWay
+        }
     }
     impl FlyBehavior for FlyNoWay {
         fn perform(&self) {
@@ -25,7 +29,9 @@ mod fly {
 
     pub struct FlyJet;
     impl FlyJet {
-        pub fn new() -> Self {FlyJet}
+        pub fn new() -> Self {
+            FlyJet
+        }
     }
     impl FlyBehavior for FlyJet {
         fn perform(&self) {
@@ -41,7 +47,9 @@ mod quack {
 
     pub struct QuackAsDuck;
     impl QuackAsDuck {
-        pub fn new() -> Self { QuackAsDuck  }
+        pub fn new() -> Self {
+            QuackAsDuck
+        }
     }
     impl QuackBehavior for QuackAsDuck {
         fn perform(&self) {
@@ -51,7 +59,9 @@ mod quack {
 
     pub struct MuteQuack;
     impl MuteQuack {
-        pub fn new() -> Self { MuteQuack  }
+        pub fn new() -> Self {
+            MuteQuack
+        }
     }
     impl QuackBehavior for MuteQuack {
         fn perform(&self) {
@@ -61,7 +71,9 @@ mod quack {
 
     pub struct SqueakQuack;
     impl SqueakQuack {
-        pub fn new() -> Self { SqueakQuack  }
+        pub fn new() -> Self {
+            SqueakQuack
+        }
     }
     impl QuackBehavior for SqueakQuack {
         fn perform(&self) {
@@ -76,27 +88,48 @@ mod duck {
 
     pub enum DuckKind {
         MallardDuck,
-        ModelDuck
+        ModelDuck,
+        RubberDuck,
+        DecoyDuck,
     }
     pub struct Duck {
-        name    : String,
-        fly     :  Box<FlyBehavior>,
-        quack   :  Box<QuackBehavior>,
+        name: String,
+        fly: Box<FlyBehavior>,
+        quack: Box<QuackBehavior>,
     }
 
     impl Duck {
-        pub fn new(kind : DuckKind) -> Duck {
+        pub fn new(kind: DuckKind) -> Duck {
             let duck = match kind {
-                DuckKind::MallardDuck => Duck {
-                    name : String::from("Mallard Duck"),
-                    fly: Box::new(FlyWithWings::new()),
-                    quack: Box::new(QuackAsDuck::new())
-                },
-                DuckKind::ModelDuck => Duck {
-                    name : String::from("Model Duck"),
-                    fly: Box::new(FlyNoWay::new()),
-                    quack: Box::new(QuackAsDuck::new())
-                },
+                DuckKind::MallardDuck => {
+                    Duck {
+                        name: String::from("Mallard Duck"),
+                        fly: Box::new(FlyWithWings::new()),
+                        quack: Box::new(QuackAsDuck::new()),
+                    }
+                }
+                DuckKind::ModelDuck => {
+                    Duck {
+                        name: String::from("Model Duck"),
+                        fly: Box::new(FlyNoWay::new()),
+                        quack: Box::new(QuackAsDuck::new()),
+                    }
+                }
+                DuckKind::RubberDuck => {
+                    Duck {
+                        name: String::from("Rubber Duck"),
+                        fly: Box::new(FlyNoWay::new()),
+                        quack: Box::new(SqueakQuack::new()),
+                    }
+                }
+                DuckKind::DecoyDuck => {
+                    Duck {
+                        name: String::from("Decoy Duck"),
+                        fly: Box::new(FlyNoWay::new()),
+                        quack: Box::new(MuteQuack::new()),
+                    }
+                }
+
             };
 
             println!("{} was created.", &duck.name);
@@ -110,7 +143,7 @@ mod duck {
             print!("{} perform: ", &self.name);
             self.quack.perform();
         }
-        pub fn setFlyBehavior(&mut self, behavior : Box<FlyBehavior>) {
+        pub fn set_fly_behavior(&mut self, behavior: Box<FlyBehavior>) {
             self.fly = behavior;
         }
     }
@@ -128,7 +161,18 @@ fn main() {
         let mut duck = Duck::new(DuckKind::ModelDuck);
         duck.fly();
         duck.quack();
-        duck.setFlyBehavior(Box::new(fly::FlyJet::new()));
+        duck.set_fly_behavior(Box::new(fly::FlyJet::new()));
         duck.fly();
     }
+    {
+        let duck = Duck::new(DuckKind::RubberDuck);
+        duck.fly();
+        duck.quack();
+    }
+    {
+        let duck = Duck::new(DuckKind::DecoyDuck);
+        duck.fly();
+        duck.quack();
+    }
+
 }
